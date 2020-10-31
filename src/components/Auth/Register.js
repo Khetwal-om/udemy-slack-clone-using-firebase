@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-
+import firebase from '../../firebase'
 
 
 import {Grid,Form,Segment,Button,Header,Message,Icon} from 'semantic-ui-react'
@@ -10,20 +10,62 @@ class Register extends Component {
         username: '',
         email: '',
         password: '',
-        passwordConfirmation: ''
+        passwordConfirmation: '',
+        errors: '',
+        isPasswordValid: false
     }
     handleChange=(event)=> {
         this.setState({
             [event.target.name]: event.target.value
         })
     }
-    handleSubmit=(event)=>{
-        event.preventDefault()
-        
+    isFormValid=()=> {
+        let errors=[]
+        let error
+        if(this.isFormEmpty(this.state)){
+            error={message : 'Fill in all the fields'}
+            this.setState({errors: errors.concat(error)})
+            return false
+        }else if (!this.isPasswordValid(this.state)){
+            error={message: 'Password is invalid'}
+            this.setState({errors: errors.concat(error)})
+        }else {
 
+
+        }
+    }
+    isFormEmpty=({username,email,password,passwordConfirmation})=>{
+        return !username.length || !email.length || !password.length || !passwordConfirmation.length
+    }
+    isPasswordValid=({password,passwordConfirmation})=>{
+        if(password.length < 6|| passwordConfirmation.length<6){
+            return false
+        } 
+        else if(password!==passwordConfirmation){
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
+    handleSubmit=(event)=>{
+        if(this.isFormValid()){
+            event.preventDefault()
+            firebase
+            .auth()
+            .createUserWithEmailAndPassword(this.state.email,this.state.password)
+            .then(createdUser=>{
+                console.log(createdUser)
+            })
+            .catch(err=> {
+                console.log(err)
+            })
+        }
     }
     render() {
         const {username,password,email,passwordConfirmation}=this.state
+        console.log(this.state)
         return (
             <Grid textAlign="center" verticalAlign="middle">
               <Grid.Column style={{maxWidth: 450}}>
