@@ -6,7 +6,15 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import 'semantic-ui-css/semantic.min.css'
 import firebase from 'firebase'
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
+import {composeWithDevTools} from 'redux-devtools-extension'
+import rootReducer from './reducers';
+
+
+
+const store=createStore(rootReducer,composeWithDevTools())
 
 
 class Root extends Component {
@@ -36,10 +44,13 @@ class Root extends Component {
 const RootWithAuth=withRouter(Root)
 
 ReactDOM.render(
+  <Provider store={store}>
+
   <BrowserRouter>
 
     <RootWithAuth/>
   </BrowserRouter>
+  </Provider>
 
     ,
   document.getElementById('root')

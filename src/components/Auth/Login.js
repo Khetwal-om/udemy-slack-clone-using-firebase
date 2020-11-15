@@ -16,9 +16,8 @@ class Login extends React.Component {
     email: "",
     password: "",
     errors: [],
-    loading: false,
+    loading: false
   };
-
 
   displayErrors = errors =>
     errors.map((error, i) => <p key={i}>{error.message}</p>);
@@ -33,24 +32,22 @@ class Login extends React.Component {
       this.setState({ errors: [], loading: true });
       firebase
         .auth()
-        .signInWithEmailAndPassword(this.state.email,this.state.password)
-        .then(signedInUser=> {
-            console.log(signedInUser)
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(signedInUser => {
+          console.log(signedInUser);
         })
-        .catch(err=>{
-            console.log(err)
-            this.setState({
-                errors: this.state.errors.concat(err),
-                loading:false
-            })
-        })
-
+        .catch(err => {
+          console.error(err);
+          this.setState({
+            errors: this.state.errors.concat(err),
+            loading: false
+          });
+        });
     }
   };
 
-  isFormValid=({email,password})=> email && password
-  
-  
+  isFormValid = ({ email, password }) => email && password;
+
   handleInputError = (errors, inputName) => {
     return errors.some(error => error.message.toLowerCase().includes(inputName))
       ? "error"
@@ -58,24 +55,17 @@ class Login extends React.Component {
   };
 
   render() {
-    const {
-      email,
-      password,
-      errors,
-      loading
-    } = this.state;
+    const { email, password, errors, loading } = this.state;
 
     return (
       <Grid textAlign="center" verticalAlign="middle" className="app">
         <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" icon color="violet" textAlign="center">
-            <Icon name="puzzle piece" color="violet" />
-            Register for DevChat
+          <Header as="h1" icon color="violet" textAlign="center">
+            <Icon name="code branch" color="violet" />
+            Login to DevChat
           </Header>
           <Form onSubmit={this.handleSubmit} size="large">
             <Segment stacked>
-              
-              
               <Form.Input
                 fluid
                 name="email"
@@ -100,11 +90,10 @@ class Login extends React.Component {
                 type="password"
               />
 
-
               <Button
                 disabled={loading}
                 className={loading ? "loading" : ""}
-                color="orange"
+                color="violet"
                 fluid
                 size="large"
               >
@@ -119,7 +108,7 @@ class Login extends React.Component {
             </Message>
           )}
           <Message>
-            Not a user? <Link to="/register">Register</Link>
+            Don't have an account? <Link to="/register">Register</Link>
           </Message>
         </Grid.Column>
       </Grid>
